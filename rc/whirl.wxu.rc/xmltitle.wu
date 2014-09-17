@@ -1,0 +1,5 @@
+cat \
+| sed  "/<webcams>/,/<\/webcams>/d" \
+| sed  "/<pws>/,/<\/pws>/d" \
+| sed  "/<airport>/,/<\/airport>/d" \
+

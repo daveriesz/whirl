@@ -1,0 +1,17 @@
+sed "s/\(<tr[^>]*>\)/{\1/g;;s/\(<\/tr[^>]*>\)/\1}/g" \
+| tr -d "\n" \
+| tr "{}" "\n\n" \
+| sed -n "/>Raw METAR</,//p" \
+| tr "\t" " " \
+| sed "s/&deg;/°/g;; \
+       s/&#176;/°/g;; \
+       s/&nbsp;/ /g" \
+| egrep -v "(>(Current Radar|Raw METAR)<|Forecast as of|<table[^>]*>)" \
+| egrep "^ *<tr[^>]*> *<td[^>]*> *" \
+| sed "s/<img[^>]*>//g;; \
+       s/^ *<tr> *<td[^>]*> *<b>\([^<]*\)<\/b> *<br[^>]*> *\(.*\) *<\/td> *<\/tr>/{\1{:{\2/g;; \
+       s/^ *<tr> *<td[^>]*> *<\/td> *<td[^>]*> *<b>\([^<]*\)<\/b> *<br[^>]*> *\(.*\) *<\/td> *<\/tr>/{\1{:{\2/g;; \
+       s/<[^>]*>//g;;/^ *$/d;; \
+       s/^ *\(National Weather Service\) *: *\(.*\) *$/{\1{:{\2/g;; \
+       s/   */ /g" \
+

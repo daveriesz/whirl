@@ -1,0 +1,9 @@
+sed "s/\(<tr[^>]*>\)/{\1/g;;s/\(<\/tr[^>]*>\)/\1}/g" \
+| tr -d "\n" \
+| tr "{}" "\n\n" \
+| egrep "(^<tr[^>]*>|City Not Found)" \
+| egrep "(Observed at|City Not Found)" \
+| sed "s/^.*Updated: <b>\([^<]*\)<\/b>.*Observed at<b>\([^<]*\)<\/b>.*$/\*\*\* Current conditions at: \2}\*\*\* Last updated: \1}/g;; \
+       s/^.*\(City Not Found\).*$/\1/g" \
+| tr "}" "\n" \
+ 

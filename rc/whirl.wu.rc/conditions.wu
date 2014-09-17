@@ -1,0 +1,27 @@
+cat \
+| sed "s/\(<tr[^>]*>\)/{\1/g;;s/\(<\/tr[^>]*>\)/\1}/g" \
+| tr -d "\n" \
+| tr "{}" "\n\n" \
+| sed -n "1,/>Raw METAR</p" \
+| tr "\t" " " \
+| sed "s/&deg;/°/g;; \
+       s/&#176;/°/g;; \
+       s/&nbsp;/ /g" \
+| egrep -v "<table[^>]*>" \
+| egrep "^<tr[^>]*>" \
+| egrep -v "colspan=" \
+| sed "s/^.*\(National Weather Service\) *: *<.*> *\([^<]*\) *<\/a>.*$/{\1{:{\2/g" \
+| sed "s/^ *<tr[^>]*> *<td[^>]*>/{/g;; \
+       s/ *<\/td> *<td[^>]*> */{:{/g;; \
+       s/ *<\/td> *<\/tr> *//g;; \
+       s/<\/*span[^>]*>//g;; \
+       s/<\/*img[^>]*>//g;; \
+       s/<\/*br[^>]*>//g;; \
+       s/<\/*b[^>]*>//g;; \
+       s/ *{ */{/g;; \
+       s/   */ /g" \
+| egrep -v "<x[^>]*>" \
+| egrep -iv "error" \
+| sed "s/^<tr.*>Place: Temperature.*<\/tr>$/{Place{:{Temperature/g" \
+| sed "s/{<a.*>\([^><]*\)<\/a>:/{\1{:{/g"
+

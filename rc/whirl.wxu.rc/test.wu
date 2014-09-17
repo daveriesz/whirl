@@ -1,0 +1,6 @@
+sed "1,/Forecast as of/d" \
+| sed "s/<b>/{<b>/g;;s/<\/*div[^>]*>/<\/div>}/g" \
+| tr -d "\n" \
+| tr "{}\t" "\n\n " \
+| egrep "^<b>" \
+| egrep -v "^<b>Forecast as of" \

@@ -1,0 +1,19 @@
+cat \
+| tr -d "\015" \
+| tr "\t" " " \
+| sed "s/^  *//g;;s/  *$//g" \
+| egrep "^<(station_id|observation_time|local_time|weather|temp_f|temp_c|relative_humidity|wind_(dir|mph|gust_mph)|pressure_(mb|in)|dewpoint_(f|c)|heat_index_(f|c)|windchill_(f|c)|visibility_(mi|km))>" \
+| sed "s/^<station_id>\([^<]*\)<\/station_id>$/{Station ID{:{\1/g" \
+| sed "s/^<observation_time>\([^<]*\)<\/observation_time>$/{Observation time{:{\1/g" \
+| sed "s/^<local_time>\([^<]*\)<\/local_time>$/{Local time{:{\1/g" \
+| sed "s/^<weather>\([^<]*\)<\/weather>$/{Conditions{:{\1/g" \
+| sed "s/^<relative_humidity>\([^<]*\)<\/relative_humidity>$/{Relative Humidity{:{\1/g" \
+| sed "s/^<wind_gust_mph>\([^<]*\)<\/wind_gust_mph>$/{Wind gust{:{\1 mph/g" \
+| sed "/temp_[fc]/,/temp_[fc]/{ N;;s/<temp_\([fc]\)>\([^<]*\)<\/[^>]*>\n<temp_\([fc]\)>\([^<]*\)<\/[^>]*>/{Temperature{:{\2 \1 \/ \4 \3/g;;s/ f/ F/;;s/ c/ C/ }" \
+| sed "/dewpoint_[fc]/,/dewpoint_[fc]/{ N;;s/<dewpoint_\([fc]\)>\([^<]*\)<\/[^>]*>\n<dewpoint_\([fc]\)>\([^<]*\)<\/[^>]*>/{Dew Point{:{\2 \1 \/ \4 \3/g;;s/ f/ F/;;s/ c/ C/ }" \
+| sed "/heat_index_[fc]/,/heat_index_[fc]/{ N;;s/<heat_index_\([fc]\)>\([^<]*\)<\/[^>]*>\n<heat_index_\([fc]\)>\([^<]*\)<\/[^>]*>/{Heat Index{:{\2 \1 \/ \4 \3/g;;s/ f/ F/;;s/ c/ C/ }" \
+| sed "/windchill_[fc]/,/windchill_[fc]/{ N;;s/<windchill_\([fc]\)>\([^<]*\)<\/[^>]*>\n<windchill_\([fc]\)>\([^<]*\)<\/[^>]*>/{Windchill{:{\2 \1 \/ \4 \3/g;;s/ f/ F/;;s/ c/ C/ }" \
+| sed "/pressure_[im][nb]/,/pressure_[im][nb]/{ N;;s/<pressure_\([im][nb]\)>\([^<]*\)<\/[^>]*>\n<pressure_\([im][nb]\)>\([^<]*\)<\/[^>]*>/{Pressure{:{\2 \1 \/ \4 \3/g }" \
+| sed "/visibility_[mk][im]/,/visibility_[mk][im]/{ N;;s/<visibility_\([mk][im]\)>\([^<]*\)<\/[^>]*>\n<visibility_\([mk][im]\)>\([^<]*\)<\/[^>]*>/{Visibility{:{\2 \1 \/ \4 \3/g }" \
+| sed "/wind_[dm][ip][rh]/,/wind_[dm][ip][rh]/{ N;;s/<wind_\([dm][ip][rh]\)>\([^<]*\)<\/[^>]*>\n<wind_\([dm][ip][rh]\)>\([^<]*\)<\/[^>]*>/{Wind{:{\2 \1 \/ \4 \3/g;;s/dir \//at/ }" \
+| cat

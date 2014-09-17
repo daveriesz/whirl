@@ -1,0 +1,6 @@
+#option|default|parse file    |title parse file|url
+-c     |TRUE   |conditions.wu |condtitle.wu    |http://m.wund.com/cgi-bin/findweather/getForecast?query=%s|Current conditions
+-f     |FALSE  |forecast.wu   |foretitle.wu    |http://m.wund.com/cgi-bin/findweather/getForecast?query=%s|Current forecast
+-w     |FALSE  |warning.wu    |warntitle.wu    |http://m.wund.com/cgi-bin/findweather/getForecast?query=%s&feature=warning|Warnings
+-t     |FALSE  |test.wu       |foretitle.wu    |http://m.wund.com/cgi-bin/findweather/getForecast?query=%s|Test
+-lx    |FALSE  |xmltitle.wu   |xmlblank.wu     |http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=%s|XML Location

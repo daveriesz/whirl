@@ -1,0 +1,9 @@
+sed "s/\(<tr[^>]*>\)/{\1/g;;s/\(<\/tr[^>]*>\)/\1}/g" \
+| sed "s/\(<\/*br *\/*>\)/\1}/g" \
+| tr -d "\n" \
+| tr "{}\t" "\n\n " \
+| egrep -i "(statement|expires)" \
+| sed "s/>  *</></g" \
+| sed "s/^  *//g" \
+| sed "s/<[^>]*>//g" \
+| sed "s/^/\*\*\* /g" \

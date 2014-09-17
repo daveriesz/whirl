@@ -1,0 +1,16 @@
+cat \
+| sed "1,/<a name=\"forecast\">/d" \
+| tr -d "\015" \
+| sed "s/<b>/{<b>/g;;s/<\/*div[^>]*>/<\/div>}/g" \
+| tr -d "\n" \
+| tr "{}\t" "\n\n " \
+| egrep "^<b>" \
+| egrep -v "^<b>Forecast as of" \
+| egrep -v "^<b><font" \
+| sed "s/<img[^>]*>//g" \
+| sed "s/<\/b> *<br *\/*> *<br *\/*> */{:{/g" \
+| sed "s/<\/b> *<br *\/*> */{:{/g" \
+| sed "s/^<b>/{/g" \
+| sed "s/<[^>]*>//g" \
+| sed "s/&deg;/°/g;;s/&#176;/°/g;;s/&nbsp;/ /g" \
+| egrep "^\{[^\{]*\{[^\{]*\{[^\{]*$" \

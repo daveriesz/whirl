@@ -1,0 +1,17 @@
+cat | tr -d "\015" \
+| tr "\t" " " \
+| sed "s/}/wxu_rightbracket/g" \
+| sed "s/^  *//g" \
+| sed -n "/<display_location>/,/<\/observation_location>/p" \
+| sed "s/\(<\/display_location>\)/\1}/g" \
+| sed "s/\(<\/observation_location>\)/\1}/g" \
+| tr -d "\n" \
+| tr "}" "\n" \
+| sed "s/wxu_rightbracket/}/g" \
+| sed "s/^<display_location>\(.*\)<\/display_location>$/*** Current conditions for: \1/g" \
+| sed "s/^<observation_location>\(.*\)<\/observation_location>$/*** Observed at: \1/g" \
+| sed "s/<full>\([^<]*\)<\/full>/\1, /g" \
+| sed "s/<country_iso3166>\([^<]*\)<\/country_iso3166>/\1, /g" \
+| sed "s/<elevation>\([^<]*\)<\/elevation>/\1/g" \
+| sed "s/<[^\/][^>]*>\([^<]*\)<\/[^>]*>//g" \
+| cat && echo ""
